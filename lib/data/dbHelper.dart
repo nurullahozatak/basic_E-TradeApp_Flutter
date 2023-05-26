@@ -30,10 +30,13 @@ class DbHelper {
   }
 
   //Veri tabanından alınan verileri listeye dönüştürme
-  Future<List> getProducts() async {
+  Future<List<Product>> getProducts() async {
     Database db = await this.db;
     var result = await db.query("products");
-    return result;
+    //product içinde oluşturduğumuz fromObject constructoru teker teker map'ten aldığı alanları ayırıp buraya atıyo ve bu List.generator da bunu listeye çeviriyor.
+    return List.generate(result.length, (i) {
+      return Product.fromObject(result[i]);
+    });
   }
 
   Future<int> insert(Product product) async {
@@ -47,8 +50,8 @@ class DbHelper {
   Future<int> delete(Product product) async {
     Database db = await this.db;
 
-    var result = await db.delete("products", product.toMap(),
-        where: "id=?", whereArgs: [product.id]);
+    var result =
+        await db.delete("products", where: "id=?", whereArgs: [product.id]);
 
     return result;
   }

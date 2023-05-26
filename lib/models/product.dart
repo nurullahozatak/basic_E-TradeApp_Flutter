@@ -21,6 +21,7 @@ class Product {
     if (id != null) {
       map["id"] = id;
     }
+    throw '';
   }
 
   Product.fromObject(dynamic o) {
